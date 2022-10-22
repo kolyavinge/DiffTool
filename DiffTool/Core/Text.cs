@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace DiffTool.Core;
 
-internal class Text
+public class Text
 {
     public readonly IReadOnlyList<Line> Lines;
 
@@ -20,7 +20,7 @@ internal class Text
         Lines = lines;
     }
 
-    public Text GetRange(int fromIndex, int toIndex)
+    internal Text GetRange(int fromIndex, int toIndex)
     {
         var range = new List<Line>();
         for (int i = fromIndex; i <= toIndex; i++)

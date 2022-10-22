@@ -4,9 +4,9 @@ namespace DiffTool.Core;
 
 public class DiffResult
 {
-    public IReadOnlyCollection<LineDiff> LinesDiff { get; }
+    public IReadOnlyList<LineDiff> LinesDiff { get; }
 
-    internal DiffResult(IReadOnlyCollection<LineDiff> linesDiff)
+    internal DiffResult(IReadOnlyList<LineDiff> linesDiff)
     {
         LinesDiff = linesDiff;
     }

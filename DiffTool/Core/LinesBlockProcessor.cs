@@ -39,7 +39,7 @@ internal class LinesBlockProcessor
         }
         else
         {
-            result.AddRange(Changed(oldText, newText, lastBlock, block));
+            result.AddRange(Changed(lastBlock, block));
         }
         for (int i = 0; i < block.LinesCount; i++)
         {
@@ -71,7 +71,7 @@ internal class LinesBlockProcessor
         }
     }
 
-    private IEnumerable<LineDiff> Changed(Text oldText, Text newText, LinesBlock lastBlock, LinesBlock block)
+    private IEnumerable<LineDiff> Changed(LinesBlock lastBlock, LinesBlock block)
     {
         int i = lastBlock.OldLinePosition + lastBlock.LinesCount;
         int j = lastBlock.NewLinePosition + lastBlock.LinesCount; ;

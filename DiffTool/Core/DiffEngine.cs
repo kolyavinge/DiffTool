@@ -16,12 +16,9 @@ public class DiffEngine
         _linesBlockProcessor = new LinesBlockProcessor();
     }
 
-    public DiffResult GetDiff(string oldTextString, string newTextString)
+    public DiffResult GetDiff(Text oldText, Text newText)
     {
         var lineDiffs = new List<LineDiff>();
-
-        var oldText = new Text(oldTextString);
-        var newText = new Text(newTextString);
 
         var prefixLinesCount = _prefixSuffixFinder.GetPrefixLinesCount(oldText, newText);
         for (int i = 0; i < prefixLinesCount; i++)

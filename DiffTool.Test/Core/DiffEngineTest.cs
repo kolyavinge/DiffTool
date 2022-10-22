@@ -156,7 +156,7 @@ public class DiffEngineTest
 
     private void MakeDiff(string oldText, string newText)
     {
-        _diffResult = _engine.GetDiff(oldText, newText);
+        _diffResult = _engine.GetDiff(new(oldText), new(newText));
         _linesDiff = _diffResult.LinesDiff.ToList();
     }
 }

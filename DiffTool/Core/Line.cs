@@ -1,12 +1,12 @@
 ﻿namespace DiffTool.Core;
 
-internal class Line : IEquatable<Line>
+public class Line : IEquatable<Line>
 {
     private readonly string _line;
 
     public readonly int Position;
 
-    public Line(string line, int position)
+    internal Line(string line, int position)
     {
         _line = line;
         Position = position;
