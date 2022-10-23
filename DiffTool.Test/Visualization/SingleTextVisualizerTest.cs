@@ -75,14 +75,14 @@ internal class SingleTextVisualizerTest
 
         Assert.That(result.Text, Is.EqualTo("old1\r\nold2\r\nnew1\r\nnew2\r\nsame\r\nold3\r\nold4\r\nnew3\r\nnew4"));
         Assert.That(result.LinesDiff, Has.Count.EqualTo(9));
-        Assert.That(result.LinesDiff[0], Is.EqualTo(new SingleTextVisualizerLineDiff(DiffKind.Change)));
-        Assert.That(result.LinesDiff[1], Is.EqualTo(new SingleTextVisualizerLineDiff(DiffKind.Change)));
-        Assert.That(result.LinesDiff[2], Is.EqualTo(new SingleTextVisualizerLineDiff(DiffKind.Change)));
-        Assert.That(result.LinesDiff[3], Is.EqualTo(new SingleTextVisualizerLineDiff(DiffKind.Change)));
+        Assert.That(result.LinesDiff[0], Is.EqualTo(new SingleTextVisualizerLineDiff(DiffKind.Change, TextKind.Old)));
+        Assert.That(result.LinesDiff[1], Is.EqualTo(new SingleTextVisualizerLineDiff(DiffKind.Change, TextKind.Old)));
+        Assert.That(result.LinesDiff[2], Is.EqualTo(new SingleTextVisualizerLineDiff(DiffKind.Change, TextKind.New)));
+        Assert.That(result.LinesDiff[3], Is.EqualTo(new SingleTextVisualizerLineDiff(DiffKind.Change, TextKind.New)));
         Assert.That(result.LinesDiff[4], Is.EqualTo(new SingleTextVisualizerLineDiff(DiffKind.Same)));
-        Assert.That(result.LinesDiff[5], Is.EqualTo(new SingleTextVisualizerLineDiff(DiffKind.Change)));
-        Assert.That(result.LinesDiff[6], Is.EqualTo(new SingleTextVisualizerLineDiff(DiffKind.Change)));
-        Assert.That(result.LinesDiff[7], Is.EqualTo(new SingleTextVisualizerLineDiff(DiffKind.Change)));
-        Assert.That(result.LinesDiff[8], Is.EqualTo(new SingleTextVisualizerLineDiff(DiffKind.Change)));
+        Assert.That(result.LinesDiff[5], Is.EqualTo(new SingleTextVisualizerLineDiff(DiffKind.Change, TextKind.Old)));
+        Assert.That(result.LinesDiff[6], Is.EqualTo(new SingleTextVisualizerLineDiff(DiffKind.Change, TextKind.Old)));
+        Assert.That(result.LinesDiff[7], Is.EqualTo(new SingleTextVisualizerLineDiff(DiffKind.Change, TextKind.New)));
+        Assert.That(result.LinesDiff[8], Is.EqualTo(new SingleTextVisualizerLineDiff(DiffKind.Change, TextKind.New)));
     }
 }

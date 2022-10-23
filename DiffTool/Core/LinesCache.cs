@@ -10,7 +10,7 @@ internal class LinesCache
     public LinesCache(Text text)
     {
         _positions = text.Lines
-            .Select((x, i) => new { Line = x.AsString(), Position = i })
+            .Select(x => new { Line = x.AsString(), Position = x.Position })
             .GroupBy(x => x.Line)
             .ToDictionary(k => k.Key, v => v.Select(x => x.Position).ToHashSet());
     }

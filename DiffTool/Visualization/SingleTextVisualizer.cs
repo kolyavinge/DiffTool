@@ -54,9 +54,9 @@ public class SingleTextVisualizer
                 if (lineDiff.Kind == DiffKind.Change)
                 {
                     resultText.Add(oldText.Lines[lineDiff.OldLine].AsString());
-                    resultLinesDiff.Add(new(DiffKind.Change));
+                    resultLinesDiff.Add(new(DiffKind.Change, TextKind.Old));
                     tempNewLinesText.Add(newText.Lines[lineDiff.NewLine].AsString());
-                    tempNewLinesDiff.Add(new(DiffKind.Change));
+                    tempNewLinesDiff.Add(new(DiffKind.Change, TextKind.New));
                     lineIndex++;
                     goto case 2;
                 }

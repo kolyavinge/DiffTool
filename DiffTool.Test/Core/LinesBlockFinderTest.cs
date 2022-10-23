@@ -23,9 +23,7 @@ internal class LinesBlockFinderTest
         FindLongestBlocks("", "");
 
         Assert.That(_result, Has.Count.EqualTo(1));
-        Assert.That(_result[0].OldLinePosition, Is.EqualTo(0));
-        Assert.That(_result[0].NewLinePosition, Is.EqualTo(0));
-        Assert.That(_result[0].LinesCount, Is.EqualTo(1));
+        Assert.That(_result[0], Is.EqualTo(new LinesBlock(0, 0, 1)));
     }
 
     [Test]
@@ -50,9 +48,7 @@ internal class LinesBlockFinderTest
         FindLongestBlocks("line", "line");
 
         Assert.That(_result, Has.Count.EqualTo(1));
-        Assert.That(_result[0].OldLinePosition, Is.EqualTo(0));
-        Assert.That(_result[0].NewLinePosition, Is.EqualTo(0));
-        Assert.That(_result[0].LinesCount, Is.EqualTo(1));
+        Assert.That(_result[0], Is.EqualTo(new LinesBlock(0, 0, 1)));
     }
 
     [Test]
@@ -62,9 +58,7 @@ internal class LinesBlockFinderTest
 
         Assert.That(_result, Has.Count.EqualTo(1));
 
-        Assert.That(_result[0].OldLinePosition, Is.EqualTo(0));
-        Assert.That(_result[0].NewLinePosition, Is.EqualTo(0));
-        Assert.That(_result[0].LinesCount, Is.EqualTo(2));
+        Assert.That(_result[0], Is.EqualTo(new LinesBlock(0, 0, 2)));
     }
 
     [Test]
@@ -74,9 +68,7 @@ internal class LinesBlockFinderTest
 
         Assert.That(_result, Has.Count.EqualTo(1));
 
-        Assert.That(_result[0].OldLinePosition, Is.EqualTo(0));
-        Assert.That(_result[0].NewLinePosition, Is.EqualTo(0));
-        Assert.That(_result[0].LinesCount, Is.EqualTo(4));
+        Assert.That(_result[0], Is.EqualTo(new LinesBlock(0, 0, 4)));
     }
 
     [Test]
@@ -86,13 +78,8 @@ internal class LinesBlockFinderTest
 
         Assert.That(_result, Has.Count.EqualTo(2));
 
-        Assert.That(_result[0].OldLinePosition, Is.EqualTo(0));
-        Assert.That(_result[0].NewLinePosition, Is.EqualTo(0));
-        Assert.That(_result[0].LinesCount, Is.EqualTo(2));
-
-        Assert.That(_result[1].OldLinePosition, Is.EqualTo(2));
-        Assert.That(_result[1].NewLinePosition, Is.EqualTo(3));
-        Assert.That(_result[1].LinesCount, Is.EqualTo(2));
+        Assert.That(_result[0], Is.EqualTo(new LinesBlock(0, 0, 2)));
+        Assert.That(_result[1], Is.EqualTo(new LinesBlock(2, 3, 2)));
     }
 
     [Test]
@@ -102,13 +89,8 @@ internal class LinesBlockFinderTest
 
         Assert.That(_result, Has.Count.EqualTo(2));
 
-        Assert.That(_result[0].OldLinePosition, Is.EqualTo(0));
-        Assert.That(_result[0].NewLinePosition, Is.EqualTo(0));
-        Assert.That(_result[0].LinesCount, Is.EqualTo(2));
-
-        Assert.That(_result[1].OldLinePosition, Is.EqualTo(2));
-        Assert.That(_result[1].NewLinePosition, Is.EqualTo(3));
-        Assert.That(_result[1].LinesCount, Is.EqualTo(2));
+        Assert.That(_result[0], Is.EqualTo(new LinesBlock(0, 0, 2)));
+        Assert.That(_result[1], Is.EqualTo(new LinesBlock(2, 3, 2)));
     }
 
     [Test]
@@ -118,9 +100,7 @@ internal class LinesBlockFinderTest
 
         Assert.That(_result, Has.Count.EqualTo(1));
 
-        Assert.That(_result[0].OldLinePosition, Is.EqualTo(0));
-        Assert.That(_result[0].NewLinePosition, Is.EqualTo(2));
-        Assert.That(_result[0].LinesCount, Is.EqualTo(2));
+        Assert.That(_result[0], Is.EqualTo(new LinesBlock(0, 2, 2)));
     }
 
     [Test]
@@ -130,9 +110,7 @@ internal class LinesBlockFinderTest
 
         Assert.That(_result, Has.Count.EqualTo(1));
 
-        Assert.That(_result[0].OldLinePosition, Is.EqualTo(2));
-        Assert.That(_result[0].NewLinePosition, Is.EqualTo(0));
-        Assert.That(_result[0].LinesCount, Is.EqualTo(3));
+        Assert.That(_result[0], Is.EqualTo(new LinesBlock(2, 0, 3)));
     }
 
     [Test]
@@ -142,9 +120,7 @@ internal class LinesBlockFinderTest
 
         Assert.That(_result, Has.Count.EqualTo(1));
 
-        Assert.That(_result[0].OldLinePosition, Is.EqualTo(1));
-        Assert.That(_result[0].NewLinePosition, Is.EqualTo(1));
-        Assert.That(_result[0].LinesCount, Is.EqualTo(2));
+        Assert.That(_result[0], Is.EqualTo(new LinesBlock(1, 1, 2)));
     }
 
     [Test]
@@ -154,17 +130,9 @@ internal class LinesBlockFinderTest
 
         Assert.That(_result, Has.Count.EqualTo(3));
 
-        Assert.That(_result[0].OldLinePosition, Is.EqualTo(0));
-        Assert.That(_result[0].NewLinePosition, Is.EqualTo(0));
-        Assert.That(_result[0].LinesCount, Is.EqualTo(2));
-
-        Assert.That(_result[1].OldLinePosition, Is.EqualTo(2));
-        Assert.That(_result[1].NewLinePosition, Is.EqualTo(3));
-        Assert.That(_result[1].LinesCount, Is.EqualTo(2));
-
-        Assert.That(_result[2].OldLinePosition, Is.EqualTo(4));
-        Assert.That(_result[2].NewLinePosition, Is.EqualTo(6));
-        Assert.That(_result[2].LinesCount, Is.EqualTo(2));
+        Assert.That(_result[0], Is.EqualTo(new LinesBlock(0, 0, 2)));
+        Assert.That(_result[1], Is.EqualTo(new LinesBlock(2, 3, 2)));
+        Assert.That(_result[2], Is.EqualTo(new LinesBlock(4, 6, 2)));
     }
 
     private void FindLongestBlocks(string oldText, string newText)

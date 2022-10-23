@@ -12,6 +12,11 @@ public readonly struct LineDiff
         OldLine = oldLine;
         NewLine = newLine;
     }
+
+    public override string ToString()
+    {
+        return $"{Kind} {OldLine}:{NewLine}";
+    }
 }
 
 public enum DiffKind { Same, Add, Remove, Change }

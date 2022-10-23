@@ -11,19 +11,28 @@ internal class LinesBlockProcessor
 
         var result = new List<LineDiff>();
 
-        var lastBlock = new LinesBlock();
-        foreach (var block in lineBlocks.Union(new[] { new LinesBlock(oldText.Lines.Count, newText.Lines.Count, 0) }))
+        var startBlock = new LinesBlock(oldText.Lines.Min(x => x.Position), newText.Lines.Min(x => x.Position), 0);
+        var endBlock = new LinesBlock(oldText.Lines.Max(x => x.Position) + 1, newText.Lines.Max(x => x.Position) + 1, 0);
+
+        var lastBlock = startBlock;
+        foreach (var block in lineBlocks.Union(new[] { endBlock }))
         {
-            ProcessLineBlock(oldText, newText, lastBlock, block, result);
+            ProcessLineBlock(lastBlock, block, result);
+            result.AddRange(AddSameLines(block));
             lastBlock = block;
         }
 
         return result;
     }
 
-    private void ProcessLineBlock(Text oldText, Text newText, LinesBlock lastBlock, LinesBlock block, List<LineDiff> result)
+    private void ProcessLineBlock(LinesBlock lastBlock, LinesBlock block, List<LineDiff> result)
     {
-        if (lastBlock.OldLinePosition + lastBlock.LinesCount == block.OldLinePosition)
+        if (block.OldLinePosition - (lastBlock.OldLinePosition + lastBlock.LinesCount) ==
+            block.NewLinePosition - (lastBlock.NewLinePosition + lastBlock.LinesCount))
+        {
+            result.AddRange(AllChanged(lastBlock, block));
+        }
+        else if (lastBlock.OldLinePosition + lastBlock.LinesCount == block.OldLinePosition)
         {
             result.AddRange(AllAdded(lastBlock, block));
         }
@@ -31,19 +40,17 @@ internal class LinesBlockProcessor
         {
             result.AddRange(AllRemoved(lastBlock, block));
         }
-        else if (
-            block.OldLinePosition - (lastBlock.OldLinePosition + lastBlock.LinesCount) ==
-            block.NewLinePosition - (lastBlock.NewLinePosition + lastBlock.LinesCount))
-        {
-            result.AddRange(AllChanged(lastBlock, block));
-        }
         else
         {
             result.AddRange(Changed(lastBlock, block));
         }
-        for (int i = 0; i < block.LinesCount; i++)
+    }
+
+    private IEnumerable<LineDiff> AllChanged(LinesBlock lastBlock, LinesBlock block)
+    {
+        for (int i = lastBlock.OldLinePosition + lastBlock.LinesCount, j = lastBlock.NewLinePosition + lastBlock.LinesCount; i < block.OldLinePosition; i++, j++)
         {
-            result.Add(new(DiffKind.Same, block.OldLinePosition + i, block.NewLinePosition + i));
+            yield return new(DiffKind.Change, i, j);
         }
     }
 
@@ -63,20 +70,12 @@ internal class LinesBlockProcessor
         }
     }
 
-    private IEnumerable<LineDiff> AllChanged(LinesBlock lastBlock, LinesBlock block)
-    {
-        for (int i = lastBlock.OldLinePosition + lastBlock.LinesCount, j = lastBlock.NewLinePosition + lastBlock.LinesCount; i < block.OldLinePosition; i++, j++)
-        {
-            yield return new(DiffKind.Change, i, j);
-        }
-    }
-
     private IEnumerable<LineDiff> Changed(LinesBlock lastBlock, LinesBlock block)
     {
         int i = lastBlock.OldLinePosition + lastBlock.LinesCount;
-        int j = lastBlock.NewLinePosition + lastBlock.LinesCount; ;
-        for (; i < block.OldLinePosition && j < block.NewLinePosition;
-            i++, j++)
+        int j = lastBlock.NewLinePosition + lastBlock.LinesCount;
+
+        for (; i < block.OldLinePosition && j < block.NewLinePosition; i++, j++)
         {
             yield return new(DiffKind.Change, i, j);
         }
@@ -89,6 +88,14 @@ internal class LinesBlockProcessor
         for (; i < block.OldLinePosition; i++)
         {
             yield return new(DiffKind.Remove, i, -1);
+        }
+    }
+
+    private IEnumerable<LineDiff> AddSameLines(LinesBlock block)
+    {
+        for (int i = 0; i < block.LinesCount; i++)
+        {
+            yield return new(DiffKind.Same, block.OldLinePosition + i, block.NewLinePosition + i);
         }
     }
 }

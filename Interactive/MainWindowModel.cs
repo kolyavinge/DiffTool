@@ -49,24 +49,27 @@ internal class MainWindowModel
 
     private void SetLineColors(IReadOnlyList<SingleTextVisualizerLineDiff> linesDiff)
     {
-        for (int i = 0; i < DiffCodeTextBoxModel.Text.LinesCount; i++)
-        {
-            DiffCodeTextBoxModel.LinesDecoration[i] = null;
-        }
+        DiffCodeTextBoxModel.LinesDecoration.Clear();
+
         for (int i = 0; i < linesDiff.Count; i++)
         {
             var lineDiff = linesDiff[i];
-            if (lineDiff.Kind == DiffKind.Add)
+
+            if (lineDiff.DiffKind == DiffKind.Add)
             {
                 DiffCodeTextBoxModel.LinesDecoration[i] = new() { Background = Brushes.LightGreen };
             }
-            else if (lineDiff.Kind == DiffKind.Remove)
+            else if (lineDiff.DiffKind == DiffKind.Remove)
+            {
+                DiffCodeTextBoxModel.LinesDecoration[i] = new() { Background = Brushes.PaleVioletRed };
+            }
+            else if (lineDiff.DiffKind == DiffKind.Change && lineDiff.TextKind == TextKind.Old)
             {
                 DiffCodeTextBoxModel.LinesDecoration[i] = new() { Background = Brushes.LightCoral };
             }
-            else if (lineDiff.Kind == DiffKind.Change)
+            else if (lineDiff.DiffKind == DiffKind.Change && lineDiff.TextKind == TextKind.New)
             {
-                DiffCodeTextBoxModel.LinesDecoration[i] = new() { Background = Brushes.LightGoldenrodYellow };
+                DiffCodeTextBoxModel.LinesDecoration[i] = new() { Background = Brushes.GreenYellow };
             }
         }
     }

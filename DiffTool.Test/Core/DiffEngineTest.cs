@@ -154,6 +154,43 @@ public class DiffEngineTest
         Assert.That(_linesDiff[4], Is.EqualTo(new LineDiff(DiffKind.Remove, 4, -1)));
     }
 
+    [Test]
+    public void SameOldAdd()
+    {
+        MakeDiff("same\nold", "same\nnew\nadd");
+
+        Assert.That(_linesDiff, Has.Count.EqualTo(3));
+
+        Assert.That(_linesDiff[0], Is.EqualTo(new LineDiff(DiffKind.Same, 0, 0)));
+        Assert.That(_linesDiff[1], Is.EqualTo(new LineDiff(DiffKind.Change, 1, 1)));
+        Assert.That(_linesDiff[2], Is.EqualTo(new LineDiff(DiffKind.Add, -1, 2)));
+    }
+
+    [Test]
+    public void SameOldRemove()
+    {
+        MakeDiff("same\nold\nremove", "same\nnew");
+
+        Assert.That(_linesDiff, Has.Count.EqualTo(3));
+
+        Assert.That(_linesDiff[0], Is.EqualTo(new LineDiff(DiffKind.Same, 0, 0)));
+        Assert.That(_linesDiff[1], Is.EqualTo(new LineDiff(DiffKind.Change, 1, 1)));
+        Assert.That(_linesDiff[2], Is.EqualTo(new LineDiff(DiffKind.Remove, 2, -1)));
+    }
+
+    [Test]
+    public void SameChangeSameChange()
+    {
+        MakeDiff("same\nold\nsame\nold", "same\nnew\nsame\nnew");
+
+        Assert.That(_linesDiff, Has.Count.EqualTo(4));
+
+        Assert.That(_linesDiff[0], Is.EqualTo(new LineDiff(DiffKind.Same, 0, 0)));
+        Assert.That(_linesDiff[1], Is.EqualTo(new LineDiff(DiffKind.Change, 1, 1)));
+        Assert.That(_linesDiff[2], Is.EqualTo(new LineDiff(DiffKind.Same, 2, 2)));
+        Assert.That(_linesDiff[3], Is.EqualTo(new LineDiff(DiffKind.Change, 3, 3)));
+    }
+
     private void MakeDiff(string oldText, string newText)
     {
         _diffResult = _engine.GetDiff(new(oldText), new(newText));

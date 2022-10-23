@@ -5,11 +5,13 @@ namespace DiffTool.Visualization;
 
 public readonly struct SingleTextVisualizerLineDiff
 {
-    public readonly DiffKind Kind;
+    public readonly DiffKind DiffKind;
+    public readonly TextKind TextKind;
 
-    internal SingleTextVisualizerLineDiff(DiffKind kind)
+    internal SingleTextVisualizerLineDiff(DiffKind diffKind, TextKind textKind = TextKind.Unspecified)
     {
-        Kind = kind;
+        TextKind = textKind;
+        DiffKind = diffKind;
     }
 }
 

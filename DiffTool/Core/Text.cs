@@ -15,7 +15,7 @@ public class Text
             .ToList();
     }
 
-    private Text(IReadOnlyList<Line> lines)
+    internal Text(IReadOnlyList<Line> lines)
     {
         Lines = lines;
     }

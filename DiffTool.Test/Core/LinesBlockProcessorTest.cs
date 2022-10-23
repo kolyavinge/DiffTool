@@ -142,8 +142,30 @@ internal class LinesBlockProcessorTest
         Assert.That(_result[4], Is.EqualTo(new LineDiff(DiffKind.Remove, 4, -1)));
     }
 
+    [Test]
+    public void ProcessLineBlocks_WithPrefix()
+    {
+        ProcessLineBlocks(
+            new Text(new Line[] { new("old", 1), new("same", 2), new("old", 3) }),
+            new Text(new Line[] { new("new", 2), new("same", 3), new("new", 4) }),
+            new LinesBlock[]
+            {
+                new(2, 3, 1)
+            });
+
+        Assert.That(_result, Has.Count.EqualTo(3));
+        Assert.That(_result[0], Is.EqualTo(new LineDiff(DiffKind.Change, 1, 2)));
+        Assert.That(_result[1], Is.EqualTo(new LineDiff(DiffKind.Same, 2, 3)));
+        Assert.That(_result[2], Is.EqualTo(new LineDiff(DiffKind.Change, 3, 4)));
+    }
+
     private void ProcessLineBlocks(string oldText, string newText, IEnumerable<LinesBlock> lineBlocks)
     {
         _result = _processor.ProcessLineBlocks(new Text(oldText), new Text(newText), lineBlocks).ToList();
+    }
+
+    private void ProcessLineBlocks(Text oldText, Text newText, IEnumerable<LinesBlock> lineBlocks)
+    {
+        _result = _processor.ProcessLineBlocks(oldText, newText, lineBlocks).ToList();
     }
 }

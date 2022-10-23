@@ -63,11 +63,11 @@ public class DiffEngine
                 }
                 for (int i = oldText.Lines.Count; i < newText.Lines.Count; i++)
                 {
-                    lineDiffs.Add(new(DiffKind.Add, -1, i));
+                    lineDiffs.Add(new(DiffKind.Add, -1, newText.Lines[i].Position));
                 }
                 for (int i = newText.Lines.Count; i < oldText.Lines.Count; i++)
                 {
-                    lineDiffs.Add(new(DiffKind.Remove, i, -1));
+                    lineDiffs.Add(new(DiffKind.Remove, oldText.Lines[i].Position, -1));
                 }
             }
         }
