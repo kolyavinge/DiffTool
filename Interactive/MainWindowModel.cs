@@ -47,6 +47,11 @@ internal class MainWindowModel
         DiffCodeTextBoxModel.IsReadOnly = true;
     }
 
+    private readonly SolidColorBrush _brushAdd = new SolidColorBrush(new() { R = 85, G = 222, B = 78, A = 255 });
+    private readonly SolidColorBrush _brushRemove = new SolidColorBrush(new() { R = 219, G = 94, B = 94, A = 255 });
+    private readonly SolidColorBrush _brushChangeOld = new SolidColorBrush(new() { R = 224, G = 155, B = 150, A = 255 });
+    private readonly SolidColorBrush _brushChangeNew = new SolidColorBrush(new() { R = 128, G = 227, B = 123, A = 255 });
+
     private void SetLineColors(IReadOnlyList<SingleTextVisualizerLineDiff> linesDiff)
     {
         DiffCodeTextBoxModel.LinesDecoration.Clear();
@@ -57,19 +62,19 @@ internal class MainWindowModel
 
             if (lineDiff.DiffKind == DiffKind.Add)
             {
-                DiffCodeTextBoxModel.LinesDecoration[i] = new() { Background = Brushes.LightGreen };
+                DiffCodeTextBoxModel.LinesDecoration[i] = new() { Background = _brushAdd };
             }
             else if (lineDiff.DiffKind == DiffKind.Remove)
             {
-                DiffCodeTextBoxModel.LinesDecoration[i] = new() { Background = Brushes.PaleVioletRed };
+                DiffCodeTextBoxModel.LinesDecoration[i] = new() { Background = _brushRemove };
             }
             else if (lineDiff.DiffKind == DiffKind.Change && lineDiff.TextKind == TextKind.Old)
             {
-                DiffCodeTextBoxModel.LinesDecoration[i] = new() { Background = Brushes.LightCoral };
+                DiffCodeTextBoxModel.LinesDecoration[i] = new() { Background = _brushChangeOld };
             }
             else if (lineDiff.DiffKind == DiffKind.Change && lineDiff.TextKind == TextKind.New)
             {
-                DiffCodeTextBoxModel.LinesDecoration[i] = new() { Background = Brushes.GreenYellow };
+                DiffCodeTextBoxModel.LinesDecoration[i] = new() { Background = _brushChangeNew };
             }
         }
     }

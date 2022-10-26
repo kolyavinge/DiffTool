@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using DiffTool.Collections;
 
 namespace DiffTool.Core;
 
@@ -33,6 +34,11 @@ public class Text
     internal Line GetLineByPosition(int position)
     {
         return _lines[position - StartPosition];
+    }
+
+    internal IReadOnlyList<Line> GetLinesRange(int startPosition, int count)
+    {
+        return new RangeList<Line>(_lines, startPosition - StartPosition, count);
     }
 
     internal Text GetRange(int fromIndex, int toIndex)

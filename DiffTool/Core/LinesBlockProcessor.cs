@@ -17,7 +17,7 @@ internal class LinesBlockProcessor
         var lastBlock = startBlock;
         foreach (var block in lineBlocks.Union(new[] { endBlock }))
         {
-            ProcessLineBlock(lastBlock, block, result);
+            ProcessLineBlock(oldText, newText, lastBlock, block, result);
             result.AddRange(AddSameLines(block));
             lastBlock = block;
         }
@@ -25,7 +25,7 @@ internal class LinesBlockProcessor
         return result;
     }
 
-    private void ProcessLineBlock(LinesBlock lastBlock, LinesBlock block, List<LineDiff> result)
+    private void ProcessLineBlock(Text oldText, Text newText, LinesBlock lastBlock, LinesBlock block, List<LineDiff> result)
     {
         if (block.OldPosition - (lastBlock.OldPosition + lastBlock.LinesCount) ==
             block.NewPosition - (lastBlock.NewPosition + lastBlock.LinesCount))
@@ -42,7 +42,7 @@ internal class LinesBlockProcessor
         }
         else
         {
-            result.AddRange(Changed(lastBlock, block));
+            result.AddRange(Changed(oldText, newText, lastBlock, block));
         }
     }
 
@@ -70,25 +70,18 @@ internal class LinesBlockProcessor
         }
     }
 
-    private IEnumerable<LineDiff> Changed(LinesBlock lastBlock, LinesBlock block)
+    private IEnumerable<LineDiff> Changed(Text oldText, Text newText, LinesBlock lastBlock, LinesBlock block)
     {
-        int i = lastBlock.OldPosition + lastBlock.LinesCount;
-        int j = lastBlock.NewPosition + lastBlock.LinesCount;
+        int oldTextStartPosition = lastBlock.OldPosition + lastBlock.LinesCount;
+        int newTextStartPosition = lastBlock.NewPosition + lastBlock.LinesCount;
+        int oldTextLinesCount = block.OldPosition - oldTextStartPosition;
+        int newTextLinesCount = block.NewPosition - newTextStartPosition;
 
-        for (; i < block.OldPosition && j < block.NewPosition; i++, j++)
-        {
-            yield return new(DiffKind.Change, i, j);
-        }
+        var changedLinesProcessor = new ChangedLinesProcessor();
+        var result = changedLinesProcessor.GetResult(
+            oldTextStartPosition, oldTextLinesCount, oldText, newTextStartPosition, newTextLinesCount, newText);
 
-        for (; j < block.NewPosition; j++)
-        {
-            yield return new(DiffKind.Add, -1, j);
-        }
-
-        for (; i < block.OldPosition; i++)
-        {
-            yield return new(DiffKind.Remove, i, -1);
-        }
+        return result;
     }
 
     private IEnumerable<LineDiff> AddSameLines(LinesBlock block)

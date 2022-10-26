@@ -65,7 +65,6 @@ internal class LinesBlockFinder
         {
             var newLinePositions = newLinesCache.GetLinePositions(oldLine);
             if (newLinePositions == null) continue;
-            var resultBlocks = new List<LinesBlock>();
             foreach (var newLinePosition in newLinePositions)
             {
                 int equalLinesCount = 1;
@@ -86,12 +85,7 @@ internal class LinesBlockFinder
                         break;
                     }
                 }
-                resultBlocks.Add(new(oldLine.Position, newLinePosition, equalLinesCount));
-            }
-            var maxEqualLinesCount = resultBlocks.Max(x => x.LinesCount);
-            foreach (var resultBlock in resultBlocks.Where(x => x.LinesCount == maxEqualLinesCount))
-            {
-                yield return resultBlock;
+                yield return new(oldLine.Position, newLinePosition, equalLinesCount);
             }
         }
     }

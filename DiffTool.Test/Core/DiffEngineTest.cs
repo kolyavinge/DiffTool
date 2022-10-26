@@ -167,7 +167,7 @@ public class DiffEngineTest
     [Test]
     public void SameInMiddleChangeAndNew()
     {
-        MakeDiff("old\nsame\nold", "new\nadd\nsame\nnew\nadd");
+        MakeDiff("old1\nsame\nold2", "new1\nadd\nsame\nnew2\nadd");
 
         Assert.That(_linesDiff, Has.Count.EqualTo(5));
 
@@ -181,7 +181,7 @@ public class DiffEngineTest
     [Test]
     public void SameInMiddleChangeAndRemove()
     {
-        MakeDiff("old\nremove\nsame\nold\nremove", "new\nsame\nnew");
+        MakeDiff("old1\nremove\nsame\nold2\nremove", "new1\nsame\nnew2");
 
         Assert.That(_linesDiff, Has.Count.EqualTo(5));
 

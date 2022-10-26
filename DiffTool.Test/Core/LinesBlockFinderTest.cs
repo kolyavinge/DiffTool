@@ -159,6 +159,17 @@ internal class LinesBlockFinderTest
     }
 
     [Test]
+    public void SmallBlockInBig()
+    {
+        FindLongestBlocks("small\nold\nbig1\nbig2\nbig3\nsmall\nold", "small\nbig1\nbig2\nbig3\nsmall\nold");
+
+        Assert.That(_result, Has.Count.EqualTo(2));
+
+        Assert.That(_result[0], Is.EqualTo(new LinesBlock(0, 0, 1)));
+        Assert.That(_result[1], Is.EqualTo(new LinesBlock(2, 1, 5)));
+    }
+
+    [Test]
     public void Prefix()
     {
         FindLongestBlocks(

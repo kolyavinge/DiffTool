@@ -13,9 +13,9 @@ internal class TextTest
         var result = text.GetRange(0, 2);
 
         Assert.That(result.Lines, Has.Count.EqualTo(3));
-        Assert.That(result.GetLineByPosition(0).AsString(), Is.EqualTo("line1"));
-        Assert.That(result.GetLineByPosition(1).AsString(), Is.EqualTo("line2"));
-        Assert.That(result.GetLineByPosition(2).AsString(), Is.EqualTo("line3"));
+        Assert.That(result.GetLineByPosition(0).Content, Is.EqualTo("line1"));
+        Assert.That(result.GetLineByPosition(1).Content, Is.EqualTo("line2"));
+        Assert.That(result.GetLineByPosition(2).Content, Is.EqualTo("line3"));
     }
 
     [Test]
@@ -26,8 +26,8 @@ internal class TextTest
         var result = text.GetRange(1, 2);
 
         Assert.That(result.Lines, Has.Count.EqualTo(2));
-        Assert.That(result.GetLineByPosition(1).AsString(), Is.EqualTo("line2"));
-        Assert.That(result.GetLineByPosition(2).AsString(), Is.EqualTo("line3"));
+        Assert.That(result.GetLineByPosition(1).Content, Is.EqualTo("line2"));
+        Assert.That(result.GetLineByPosition(2).Content, Is.EqualTo("line3"));
     }
 
     [Test]
@@ -38,7 +38,7 @@ internal class TextTest
         var result = text.GetRange(0, 0);
 
         Assert.That(result.Lines, Has.Count.EqualTo(1));
-        Assert.That(result.GetLineByPosition(0).AsString(), Is.EqualTo("line1"));
+        Assert.That(result.GetLineByPosition(0).Content, Is.EqualTo("line1"));
     }
 
     [Test]
@@ -49,7 +49,7 @@ internal class TextTest
         var result = text.GetRange(1, 1);
 
         Assert.That(result.Lines, Has.Count.EqualTo(1));
-        Assert.That(result.GetLineByPosition(1).AsString(), Is.EqualTo("line2"));
+        Assert.That(result.GetLineByPosition(1).Content, Is.EqualTo("line2"));
     }
 
     [Test]
@@ -60,6 +60,6 @@ internal class TextTest
         var result = text.GetRange(2, 2);
 
         Assert.That(result.Lines, Has.Count.EqualTo(1));
-        Assert.That(result.GetLineByPosition(2).AsString(), Is.EqualTo("line3"));
+        Assert.That(result.GetLineByPosition(2).Content, Is.EqualTo("line3"));
     }
 }

@@ -8,7 +8,8 @@
         mc:Ignorable="d"
         Title="MainWindow"
         Height="800"
-        Width="1200">
+        Width="1200"
+        Background="Wheat">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -16,33 +17,33 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0" Background="Wheat">
+        <Grid Grid.Column="0">
             <highlighter:CodeTextBox
                 Model="{Binding LeftCodeTextBoxModel}"
                 MouseWheel="VerticalScrollBarOnMouseWheel"
                 Margin="2"
                 FontFamily="Consolas"
-                FontSize="16">
+                FontSize="14">
             </highlighter:CodeTextBox>
         </Grid>
 
-        <Grid Grid.Column="1" Background="Wheat">
+        <Grid Grid.Column="1">
             <highlighter:CodeTextBox
                 Model="{Binding RightCodeTextBoxModel}"
                 MouseWheel="VerticalScrollBarOnMouseWheel"
                 Margin="0,2"
                 FontFamily="Consolas"
-                FontSize="16">
+                FontSize="14">
             </highlighter:CodeTextBox>
         </Grid>
 
-        <Grid Grid.Column="2" Background="Wheat">
+        <Grid Grid.Column="2">
             <highlighter:CodeTextBox
                 Model="{Binding DiffCodeTextBoxModel}"
                 MouseWheel="VerticalScrollBarOnMouseWheel"
                 Margin="2"
                 FontFamily="Consolas"
-                FontSize="16">
+                FontSize="14">
             </highlighter:CodeTextBox>
         </Grid>
     </Grid>

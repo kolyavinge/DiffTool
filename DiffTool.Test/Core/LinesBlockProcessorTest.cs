@@ -113,7 +113,7 @@ internal class LinesBlockProcessorTest
     [Test]
     public void ProcessLineBlocks_Changed_3()
     {
-        ProcessLineBlocks("old\nsame\nold", "new\nadd\nsame\nnew\nadd", new LinesBlock[]
+        ProcessLineBlocks("old1\nsame\nold2", "new1\nadd\nsame\nnew2\nadd", new LinesBlock[]
         {
             new(1, 2, 1)
         });
@@ -129,7 +129,7 @@ internal class LinesBlockProcessorTest
     [Test]
     public void ProcessLineBlocks_Changed_4()
     {
-        ProcessLineBlocks("old\nremove\nsame\nold\nremove", "new\nsame\nnew", new LinesBlock[]
+        ProcessLineBlocks("old1\nremove\nsame\nold1\nremove", "new1\nsame\nnew1", new LinesBlock[]
         {
             new(2, 1, 1)
         });

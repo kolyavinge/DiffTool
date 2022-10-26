@@ -44,36 +44,37 @@ internal class SubstringFinder
     {
         var result = new LinkedList<SubstringResult>();
         int count = 0;
-        for (int i = oldText.Length, j = newText.Length; i > 0 && j > 0;)
+        int i = oldText.Length;
+        int j = newText.Length;
+        while (i > 0 && j > 0)
         {
-            if (_searchMatrix[i - 1, j] == _searchMatrix[i, j])
-            {
-                if (count > 0)
-                {
-                    result.AddFirst(new SubstringResult(i, j, count));
-                    count = 0;
-                }
-                i--;
-            }
-            else if (_searchMatrix[i, j - 1] == _searchMatrix[i, j])
-            {
-                if (count > 0)
-                {
-                    result.AddFirst(new SubstringResult(i, j, count));
-                    count = 0;
-                }
-                j--;
-            }
-            else
+            if (oldText[i - 1] == newText[j - 1])
             {
                 count++;
                 i--;
                 j--;
             }
+            else
+            {
+                if (count > 0)
+                {
+                    result.AddFirst(new SubstringResult(i, j, count));
+                    count = 0;
+                }
+                if (_searchMatrix[i, j] == _searchMatrix[i - 1, j])
+                {
+                    i--;
+                }
+                else
+                {
+                    j--;
+                }
+            }
         }
+
         if (count > 0)
         {
-            result.AddFirst(new SubstringResult(0, 0, count));
+            result.AddFirst(new SubstringResult(i, j, count));
         }
 
         return result;
