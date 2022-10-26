@@ -135,8 +135,25 @@ internal class LinesBlockFinderTest
         Assert.That(_result[2], Is.EqualTo(new LinesBlock(4, 6, 2)));
     }
 
+    [Test]
+    public void Prefix()
+    {
+        FindLongestBlocks(
+            new Text(new List<Line> { new("line1", 10), new("line2", 11), new("line3", 12) }),
+            new Text(new List<Line> { new("line1", 20), new("line2", 21), new("line3", 22) }));
+
+        Assert.That(_result, Has.Count.EqualTo(1));
+
+        Assert.That(_result[0], Is.EqualTo(new LinesBlock(10, 20, 3)));
+    }
+
     private void FindLongestBlocks(string oldText, string newText)
     {
         _result = _finder.FindLongestBlocks(new Text(oldText), new Text(newText)).ToList();
+    }
+
+    private void FindLongestBlocks(Text oldText, Text newText)
+    {
+        _result = _finder.FindLongestBlocks(oldText, newText).ToList();
     }
 }
