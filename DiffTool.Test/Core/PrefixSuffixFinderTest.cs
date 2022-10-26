@@ -64,7 +64,7 @@ internal class PrefixSuffixFinderTest
     [Test]
     public void GetSuffixLinesCount_Empty()
     {
-        var result = GetSuffixLinesCount("", "");
+        var result = GetSuffixLinesCount("", "", 0);
 
         Assert.That(result, Is.EqualTo(1));
     }
@@ -72,7 +72,7 @@ internal class PrefixSuffixFinderTest
     [Test]
     public void GetSuffixLinesCount_LeftEmpty()
     {
-        var result = GetSuffixLinesCount("", "line");
+        var result = GetSuffixLinesCount("", "line", 0);
 
         Assert.That(result, Is.EqualTo(0));
     }
@@ -80,7 +80,7 @@ internal class PrefixSuffixFinderTest
     [Test]
     public void GetSuffixLinesCount_RightEmpty()
     {
-        var result = GetSuffixLinesCount("line", "");
+        var result = GetSuffixLinesCount("line", "", 0);
 
         Assert.That(result, Is.EqualTo(0));
     }
@@ -88,7 +88,7 @@ internal class PrefixSuffixFinderTest
     [Test]
     public void GetSuffixLinesCount_Three()
     {
-        var result = GetSuffixLinesCount("line1\nline2\nline3", "line1\nline2\nline3");
+        var result = GetSuffixLinesCount("line1\nline2\nline3", "line1\nline2\nline3", 0);
 
         Assert.That(result, Is.EqualTo(3));
     }
@@ -96,7 +96,7 @@ internal class PrefixSuffixFinderTest
     [Test]
     public void GetSuffixLinesCount_ThreeAndTwo()
     {
-        var result = GetSuffixLinesCount("line1\nline2\nline3", "line2\nline3");
+        var result = GetSuffixLinesCount("line1\nline2\nline3", "line2\nline3", 0);
 
         Assert.That(result, Is.EqualTo(2));
     }
@@ -104,9 +104,17 @@ internal class PrefixSuffixFinderTest
     [Test]
     public void GetSuffixLinesCount_TwoAndThree()
     {
-        var result = GetSuffixLinesCount("line2\nline3", "line1\nline2\nline3");
+        var result = GetSuffixLinesCount("line2\nline3", "line1\nline2\nline3", 0);
 
         Assert.That(result, Is.EqualTo(2));
+    }
+
+    [Test]
+    public void GetSuffixLinesCount_BeforePrefix()
+    {
+        var result = GetSuffixLinesCount("line1\nline2", "line1\nline2", 1);
+
+        Assert.That(result, Is.EqualTo(1));
     }
 
     private int GetPrefixLinesCount(string oldText, string newText)
@@ -114,8 +122,8 @@ internal class PrefixSuffixFinderTest
         return _finder.GetPrefixLinesCount(new Text(oldText), new Text(newText));
     }
 
-    private int GetSuffixLinesCount(string oldText, string newText)
+    private int GetSuffixLinesCount(string oldText, string newText, int prefixLinesCount)
     {
-        return _finder.GetSuffixLinesCount(new Text(oldText), new Text(newText));
+        return _finder.GetSuffixLinesCount(new Text(oldText), new Text(newText), prefixLinesCount);
     }
 }

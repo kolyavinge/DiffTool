@@ -30,11 +30,13 @@ public class DiffEngine
             return new(lineDiffs);
         }
 
-        var suffixLinesCount = _prefixSuffixFinder.GetSuffixLinesCount(oldText, newText);
+        var suffixLinesCount = 0; // _prefixSuffixFinder.GetSuffixLinesCount(oldText, newText, prefixLinesCount);
         var suffixLineDiffs = new List<LineDiff>();
-        for (int i = oldText.EndPosition + 1 - suffixLinesCount; i <= oldText.EndPosition; i++)
+        for (int i = oldText.EndPosition + 1 - suffixLinesCount, j = newText.EndPosition + 1 - suffixLinesCount;
+            i <= oldText.EndPosition && j <= newText.EndPosition;
+            i++, j++)
         {
-            suffixLineDiffs.Add(new(DiffKind.Same, i, i));
+            suffixLineDiffs.Add(new(DiffKind.Same, i, j));
         }
 
         oldText = oldText.GetRange(prefixLinesCount, oldText.EndPosition - suffixLinesCount);

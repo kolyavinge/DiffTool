@@ -115,6 +115,44 @@ public class DiffEngineTest
     }
 
     [Test]
+    public void AddSameLineAfterSuffix()
+    {
+        MakeDiff("1\n2\n3", "1\n1\n2\n3");
+
+        Assert.That(_linesDiff, Has.Count.EqualTo(4));
+        Assert.That(_linesDiff[0], Is.EqualTo(new LineDiff(DiffKind.Same, 0, 0)));
+        Assert.That(_linesDiff[1], Is.EqualTo(new LineDiff(DiffKind.Add, -1, 1)));
+        Assert.That(_linesDiff[2], Is.EqualTo(new LineDiff(DiffKind.Same, 1, 2)));
+        Assert.That(_linesDiff[3], Is.EqualTo(new LineDiff(DiffKind.Same, 2, 3)));
+    }
+
+    [Test]
+    public void ChangesAroundZeroSymnNoSuffix()
+    {
+        MakeDiff("0", "+\n0\nx\n1\n0");
+
+        Assert.That(_linesDiff, Has.Count.EqualTo(5));
+        Assert.That(_linesDiff[0], Is.EqualTo(new LineDiff(DiffKind.Add, -1, 0)));
+        Assert.That(_linesDiff[1], Is.EqualTo(new LineDiff(DiffKind.Same, 0, 1)));
+        Assert.That(_linesDiff[2], Is.EqualTo(new LineDiff(DiffKind.Add, -1, 2)));
+        Assert.That(_linesDiff[3], Is.EqualTo(new LineDiff(DiffKind.Add, -1, 3)));
+        Assert.That(_linesDiff[4], Is.EqualTo(new LineDiff(DiffKind.Add, -1, 4)));
+    }
+
+    [Test]
+    public void ChangesAroundZeroSymnNoSuffix2()
+    {
+        MakeDiff("-\n0", "+\n0\nx\n1\n0");
+
+        Assert.That(_linesDiff, Has.Count.EqualTo(5));
+        Assert.That(_linesDiff[0], Is.EqualTo(new LineDiff(DiffKind.Change, 0, 0)));
+        Assert.That(_linesDiff[1], Is.EqualTo(new LineDiff(DiffKind.Same, 1, 1)));
+        Assert.That(_linesDiff[2], Is.EqualTo(new LineDiff(DiffKind.Add, -1, 2)));
+        Assert.That(_linesDiff[3], Is.EqualTo(new LineDiff(DiffKind.Add, -1, 3)));
+        Assert.That(_linesDiff[4], Is.EqualTo(new LineDiff(DiffKind.Add, -1, 4)));
+    }
+
+    [Test]
     public void SameInMiddle()
     {
         MakeDiff("1\nsame\nold\n1", "2\nsame\nnew\n2");

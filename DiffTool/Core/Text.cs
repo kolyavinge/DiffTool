@@ -30,7 +30,7 @@ public class Text
         EndPosition = _lines.LastOrDefault()?.Position ?? 0;
     }
 
-    public Line GetLineByPosition(int position)
+    internal Line GetLineByPosition(int position)
     {
         return _lines[position - StartPosition];
     }

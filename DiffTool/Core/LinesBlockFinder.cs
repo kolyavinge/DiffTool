@@ -9,13 +9,14 @@ internal class LinesBlockFinder
     {
         var blocks = FindAllBlocks(oldText, newText).ToList();
         blocks.Sort(new LinesBlock.ByEqualLinesCountComparer());
-        blocks = GetCorrectBlocks(blocks).ToList();
+        GetCorrectBlocks(blocks);
         blocks.Sort(new LinesBlock.ByOldLinePositionComparer());
+        blocks = GetOverlayingBlocks(blocks).ToList();
 
         return blocks;
     }
 
-    private IEnumerable<LinesBlock> GetCorrectBlocks(List<LinesBlock> blocks)
+    private IEnumerable<LinesBlock> GetOverlayingBlocks(List<LinesBlock> blocks)
     {
         if (blocks.Count == 0) yield break;
         yield return blocks[0];
@@ -24,11 +25,35 @@ internal class LinesBlockFinder
         {
             var prev = blocks[prevIndex];
             var current = blocks[currentIndex];
-            if (prev.OldLinePosition + prev.LinesCount <= current.OldLinePosition &&
-                prev.NewLinePosition + prev.LinesCount <= current.NewLinePosition)
+            if (prev.OldPosition + prev.LinesCount <= current.OldPosition)
             {
                 yield return current;
-                prevIndex++;
+                prevIndex = currentIndex;
+            }
+        }
+    }
+
+    private void GetCorrectBlocks(List<LinesBlock> blocks)
+    {
+        for (int prevIndex = 0; prevIndex < blocks.Count - 1; prevIndex++)
+        {
+            var prev = blocks[prevIndex];
+            for (int currentIndex = prevIndex + 1; currentIndex < blocks.Count;)
+            {
+                var current = blocks[currentIndex];
+                var currentCorrect =
+                    prev.OldPosition + prev.LinesCount <= current.OldPosition &&
+                    prev.NewPosition + prev.LinesCount <= current.NewPosition ||
+                    current.OldPosition + current.LinesCount <= prev.OldPosition &&
+                    current.NewPosition + current.LinesCount <= prev.NewPosition;
+                if (!currentCorrect)
+                {
+                    blocks.RemoveAt(currentIndex);
+                }
+                else
+                {
+                    currentIndex++;
+                }
             }
         }
     }

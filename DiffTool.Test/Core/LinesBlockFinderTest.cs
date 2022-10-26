@@ -94,6 +94,17 @@ internal class LinesBlockFinderTest
     }
 
     [Test]
+    public void TwoBlocksTwoLinesWithAdded_3()
+    {
+        FindLongestBlocks("line1\nline2\nold\nline3\nline4\nline5", "line1\nline2\nnew\nline3\nline4\nline5");
+
+        Assert.That(_result, Has.Count.EqualTo(2));
+
+        Assert.That(_result[0], Is.EqualTo(new LinesBlock(0, 0, 2)));
+        Assert.That(_result[1], Is.EqualTo(new LinesBlock(3, 3, 3)));
+    }
+
+    [Test]
     public void TwoInverseBlocksTwoLines()
     {
         FindLongestBlocks("line1\nline2\nline3\nline4", "line3\nline4\nline1\nline2");
@@ -111,6 +122,18 @@ internal class LinesBlockFinderTest
         Assert.That(_result, Has.Count.EqualTo(1));
 
         Assert.That(_result[0], Is.EqualTo(new LinesBlock(2, 0, 3)));
+    }
+
+    [Test]
+    public void InverseBlocksInMiddle()
+    {
+        FindLongestBlocks("line1\nline2\nline3\nline4\nline5", "line1\nline3\nline4\nline2\nline5");
+
+        Assert.That(_result, Has.Count.EqualTo(3));
+
+        Assert.That(_result[0], Is.EqualTo(new LinesBlock(0, 0, 1)));
+        Assert.That(_result[1], Is.EqualTo(new LinesBlock(2, 1, 2)));
+        Assert.That(_result[2], Is.EqualTo(new LinesBlock(4, 4, 1)));
     }
 
     [Test]
