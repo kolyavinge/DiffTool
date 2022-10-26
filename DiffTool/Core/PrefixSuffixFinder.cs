@@ -5,10 +5,9 @@ internal class PrefixSuffixFinder
     public int GetPrefixLinesCount(Text oldText, Text newText)
     {
         int prefixLinesCount = 0;
-        int length = Math.Min(oldText.Lines.Count, newText.Lines.Count);
-        for (int i = 0; i < length; i++)
+        for (int i = oldText.StartPosition, j = newText.StartPosition; i <= oldText.EndPosition && j <= newText.EndPosition; i++, j++)
         {
-            if (oldText.Lines[i].Equals(newText.Lines[i]))
+            if (oldText.GetLineByPosition(i).Equals(newText.GetLineByPosition(j)))
             {
                 prefixLinesCount++;
             }
@@ -21,12 +20,12 @@ internal class PrefixSuffixFinder
         return prefixLinesCount;
     }
 
-    public int GetSuffixLinesCount(Text oldText, Text newText)
+    public int GetSuffixLinesCount(Text oldText, Text newText, int prefixLinesCount)
     {
         int suffixLinesCount = 0;
-        for (int i = oldText.Lines.Count - 1, j = newText.Lines.Count - 1; i >= 0 && j >= 0; i--, j--)
+        for (int i = oldText.EndPosition, j = newText.EndPosition; i >= prefixLinesCount && j >= prefixLinesCount; i--, j--)
         {
-            if (oldText.Lines[i].Equals(newText.Lines[j]))
+            if (oldText.GetLineByPosition(i).Equals(newText.GetLineByPosition(j)))
             {
                 suffixLinesCount++;
             }

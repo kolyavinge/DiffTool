@@ -146,8 +146,8 @@ internal class LinesBlockProcessorTest
     public void ProcessLineBlocks_WithPrefix()
     {
         ProcessLineBlocks(
-            new Text(new Line[] { new("old", 1), new("same", 2), new("old", 3) }),
-            new Text(new Line[] { new("new", 2), new("same", 3), new("new", 4) }),
+            new Text(new List<Line> { new("old", 1), new("same", 2), new("old", 3) }),
+            new Text(new List<Line> { new("new", 2), new("same", 3), new("new", 4) }),
             new LinesBlock[]
             {
                 new(2, 3, 1)

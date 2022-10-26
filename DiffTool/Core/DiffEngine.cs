@@ -25,20 +25,22 @@ public class DiffEngine
         {
             lineDiffs.Add(new(DiffKind.Same, i, i));
         }
-        if (prefixLinesCount == oldText.Lines.Count && prefixLinesCount == newText.Lines.Count)
+        if (prefixLinesCount == oldText.EndPosition + 1 && prefixLinesCount == newText.EndPosition + 1)
         {
             return new(lineDiffs);
         }
 
-        var suffixLinesCount = _prefixSuffixFinder.GetSuffixLinesCount(oldText, newText);
+        var suffixLinesCount = 0; // _prefixSuffixFinder.GetSuffixLinesCount(oldText, newText, prefixLinesCount);
         var suffixLineDiffs = new List<LineDiff>();
-        for (int i = oldText.Lines.Count - suffixLinesCount; i < oldText.Lines.Count; i++)
+        for (int i = oldText.EndPosition + 1 - suffixLinesCount, j = newText.EndPosition + 1 - suffixLinesCount;
+            i <= oldText.EndPosition && j <= newText.EndPosition;
+            i++, j++)
         {
-            suffixLineDiffs.Add(new(DiffKind.Same, i, i));
+            suffixLineDiffs.Add(new(DiffKind.Same, i, j));
         }
 
-        oldText = oldText.GetRange(prefixLinesCount, oldText.Lines.Count - 1 - suffixLinesCount);
-        newText = newText.GetRange(prefixLinesCount, newText.Lines.Count - 1 - suffixLinesCount);
+        oldText = oldText.GetRange(prefixLinesCount, oldText.EndPosition - suffixLinesCount);
+        newText = newText.GetRange(prefixLinesCount, newText.EndPosition - suffixLinesCount);
 
         if (!oldText.Lines.Any() && newText.Lines.Any())
         {
@@ -57,17 +59,17 @@ public class DiffEngine
             }
             else
             {
-                for (int i = 0; i < Math.Min(oldText.Lines.Count, newText.Lines.Count); i++)
+                for (int i = oldText.StartPosition, j = newText.StartPosition; i <= oldText.EndPosition && j <= newText.EndPosition; i++, j++)
                 {
-                    lineDiffs.Add(new(DiffKind.Change, oldText.Lines[i].Position, newText.Lines[i].Position));
+                    lineDiffs.Add(new(DiffKind.Change, i, i));
                 }
-                for (int i = oldText.Lines.Count; i < newText.Lines.Count; i++)
+                for (int i = oldText.EndPosition + 1; i <= newText.EndPosition; i++)
                 {
-                    lineDiffs.Add(new(DiffKind.Add, -1, newText.Lines[i].Position));
+                    lineDiffs.Add(new(DiffKind.Add, -1, i));
                 }
-                for (int i = newText.Lines.Count; i < oldText.Lines.Count; i++)
+                for (int i = newText.EndPosition + 1; i <= oldText.EndPosition; i++)
                 {
-                    lineDiffs.Add(new(DiffKind.Remove, oldText.Lines[i].Position, -1));
+                    lineDiffs.Add(new(DiffKind.Remove, i, -1));
                 }
             }
         }

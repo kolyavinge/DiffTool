@@ -20,21 +20,21 @@ public class SingleTextVisualizer
                 lineDiff = linesDiff[lineIndex];
                 if (lineDiff.Kind == DiffKind.Add)
                 {
-                    resultText.Add(newText.Lines[lineDiff.NewLine].AsString());
+                    resultText.Add(newText.GetLineByPosition(lineDiff.NewLine).AsString());
                     resultLinesDiff.Add(new(DiffKind.Add));
                     lineIndex++;
                     goto case 1;
                 }
                 else if (lineDiff.Kind == DiffKind.Remove)
                 {
-                    resultText.Add(oldText.Lines[lineDiff.OldLine].AsString());
+                    resultText.Add(oldText.GetLineByPosition(lineDiff.OldLine).AsString());
                     resultLinesDiff.Add(new(DiffKind.Remove));
                     lineIndex++;
                     goto case 1;
                 }
                 else if (lineDiff.Kind == DiffKind.Same)
                 {
-                    resultText.Add(oldText.Lines[lineDiff.OldLine].AsString());
+                    resultText.Add(oldText.GetLineByPosition(lineDiff.OldLine).AsString());
                     resultLinesDiff.Add(new(DiffKind.Same));
                     lineIndex++;
                     goto case 1;
@@ -53,9 +53,9 @@ public class SingleTextVisualizer
                 lineDiff = linesDiff[lineIndex];
                 if (lineDiff.Kind == DiffKind.Change)
                 {
-                    resultText.Add(oldText.Lines[lineDiff.OldLine].AsString());
+                    resultText.Add(oldText.GetLineByPosition(lineDiff.OldLine).AsString());
                     resultLinesDiff.Add(new(DiffKind.Change, TextKind.Old));
-                    tempNewLinesText.Add(newText.Lines[lineDiff.NewLine].AsString());
+                    tempNewLinesText.Add(newText.GetLineByPosition(lineDiff.NewLine).AsString());
                     tempNewLinesDiff.Add(new(DiffKind.Change, TextKind.New));
                     lineIndex++;
                     goto case 2;

@@ -5,19 +5,34 @@ namespace DiffTool.Core;
 
 public class Text
 {
-    public readonly IReadOnlyList<Line> Lines;
+    private readonly List<Line> _lines;
+
+    public readonly int StartPosition;
+
+    public readonly int EndPosition;
+
+    public IEnumerable<Line> Lines => _lines;
 
     public Text(string text)
     {
-        Lines = text
+        _lines = text
             .Split(new[] { "\r\n", "\n\r", "\r", "\n" }, StringSplitOptions.None)
             .Select((x, i) => new Line(x, i))
             .ToList();
+        StartPosition = 0;
+        EndPosition = _lines.Count - 1;
     }
 
-    internal Text(IReadOnlyList<Line> lines)
+    internal Text(List<Line> lines)
     {
-        Lines = lines;
+        _lines = lines;
+        StartPosition = _lines.FirstOrDefault()?.Position ?? 0;
+        EndPosition = _lines.LastOrDefault()?.Position ?? 0;
+    }
+
+    internal Line GetLineByPosition(int position)
+    {
+        return _lines[position - StartPosition];
     }
 
     internal Text GetRange(int fromIndex, int toIndex)
@@ -25,7 +40,7 @@ public class Text
         var range = new List<Line>();
         for (int i = fromIndex; i <= toIndex; i++)
         {
-            range.Add(Lines[i]);
+            range.Add(_lines[i]);
         }
 
         return new(range);

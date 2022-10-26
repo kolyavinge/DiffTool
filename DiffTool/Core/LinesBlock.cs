@@ -4,14 +4,14 @@ namespace DiffTool.Core;
 
 internal readonly struct LinesBlock
 {
-    public readonly int OldLinePosition;
-    public readonly int NewLinePosition;
+    public readonly int OldPosition;
+    public readonly int NewPosition;
     public readonly int LinesCount;
 
     public LinesBlock(int oldLinePosition, int newLinePosition, int equalLinesCount)
     {
-        OldLinePosition = oldLinePosition;
-        NewLinePosition = newLinePosition;
+        OldPosition = oldLinePosition;
+        NewPosition = newLinePosition;
         LinesCount = equalLinesCount;
     }
 
@@ -22,10 +22,10 @@ internal readonly struct LinesBlock
             int result = -1 * x.LinesCount.CompareTo(y.LinesCount);
             if (result != 0) return result;
 
-            result = x.OldLinePosition.CompareTo(y.OldLinePosition);
+            result = x.OldPosition.CompareTo(y.OldPosition);
             if (result != 0) return result;
 
-            return x.NewLinePosition.CompareTo(y.NewLinePosition);
+            return x.NewPosition.CompareTo(y.NewPosition);
         }
     }
 
@@ -33,7 +33,7 @@ internal readonly struct LinesBlock
     {
         public int Compare(LinesBlock x, LinesBlock y)
         {
-            return x.OldLinePosition.CompareTo(y.OldLinePosition);
+            return x.OldPosition.CompareTo(y.OldPosition);
         }
     }
 }
