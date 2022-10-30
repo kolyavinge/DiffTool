@@ -33,7 +33,6 @@ internal class SubstringFinder
     public IReadOnlyCollection<SubstringResult> GetResult(string oldText, string newText)
     {
         SetSearchMatrixSize(oldText, newText);
-        InitSearchMatrix();
         FillSearchMatrix(oldText, newText);
         var result = FindResult(oldText, newText);
 
@@ -94,17 +93,6 @@ internal class SubstringFinder
                 {
                     _searchMatrix[i, j] = Math.Max(_searchMatrix[i - 1, j], _searchMatrix[i, j - 1]);
                 }
-            }
-        }
-    }
-
-    private void InitSearchMatrix()
-    {
-        for (int i = 0; i < _searchMatrix.GetLength(0); i++)
-        {
-            for (int j = 0; j < _searchMatrix.GetLength(1); j++)
-            {
-                _searchMatrix[i, j] = 0;
             }
         }
     }

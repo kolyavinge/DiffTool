@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using DiffTool.Collections;
 
 namespace DiffTool.Core;
 
 public class Text
 {
-    private readonly List<Line> _lines;
+    private readonly Line[] _lines;
 
     public readonly int StartPosition;
 
@@ -19,14 +18,14 @@ public class Text
         _lines = text
             .Split(new[] { "\r\n", "\n\r", "\r", "\n" }, StringSplitOptions.None)
             .Select((x, i) => new Line(x, i))
-            .ToList();
+            .ToArray();
         StartPosition = 0;
-        EndPosition = _lines.Count - 1;
+        EndPosition = _lines.Length - 1;
     }
 
-    internal Text(List<Line> lines)
+    internal Text(IEnumerable<Line> lines)
     {
-        _lines = lines;
+        _lines = lines.ToArray();
         StartPosition = _lines.FirstOrDefault()?.Position ?? 0;
         EndPosition = _lines.LastOrDefault()?.Position ?? 0;
     }
@@ -36,9 +35,9 @@ public class Text
         return _lines[position - StartPosition];
     }
 
-    internal IReadOnlyList<Line> GetLinesRange(int startPosition, int count)
+    internal Line[] GetLinesRange(int startPosition, int count)
     {
-        return new RangeList<Line>(_lines, startPosition - StartPosition, count);
+        return _lines.Skip(startPosition - StartPosition).Take(count).ToArray();
     }
 
     internal Text GetRange(int fromIndex, int toIndex)

@@ -17,8 +17,8 @@ internal class ChangedLinesProcessor
         int newTextLinesCount,
         Text newText)
     {
-        IReadOnlyList<Line> shortRange;
-        IReadOnlyList<Line> longRange;
+        Line[] shortRange;
+        Line[] longRange;
         int rearrangeLength;
         if (oldTextLinesCount < newTextLinesCount)
         {
@@ -33,35 +33,31 @@ internal class ChangedLinesProcessor
             rearrangeLength = newTextLinesCount;
         }
         int maxCount = int.MinValue;
+        var substringCache = new int[shortRange.Length, longRange.Length];
+        for (int i = 0; i < shortRange.Length; i++)
+        {
+            for (int j = i; j < longRange.Length; j++)
+            {
+                substringCache[i, j] = _substringFinder.GetResult(shortRange[i].Content, longRange[j].Content).Sum(x => x.Count);
+            }
+        }
         var longChangedLines = new Line[rearrangeLength];
-        var substringCache = new Dictionary<(int, int), int>();
-        var rearranges = _rearranger.GetRearranges(longRange.Count, rearrangeLength).ToList();
-        foreach (var rearrange in rearranges)
+
+        void ProcessRearrange(int[] rearrange)
         {
             var currentCount = 0;
-            for (int i = 0; i < rearrange.Length; i++)
+            for (int i = 0; i < rearrangeLength; i++)
             {
-                var shortRangeLine = shortRange[i];
-                var longRangeLine = longRange[rearrange[i]];
-                var key = (shortRangeLine.Position, longRangeLine.Position);
-                if (substringCache.TryGetValue(key, out int sum))
-                {
-                    currentCount += sum;
-                }
-                else
-                {
-                    var result = _substringFinder.GetResult(shortRangeLine.Content, longRangeLine.Content);
-                    sum = result.Sum(x => x.Count);
-                    substringCache.Add((shortRangeLine.Position, longRangeLine.Position), sum);
-                    currentCount += sum;
-                }
+                currentCount += substringCache[i, rearrange[i]];
             }
             if (currentCount > maxCount)
             {
                 maxCount = currentCount;
-                for (int i = 0; i < rearrange.Length; i++) longChangedLines[i] = longRange[rearrange[i]];
+                for (int i = 0; i < rearrangeLength; i++) longChangedLines[i] = longRange[rearrange[i]];
             }
         };
+        _rearranger.GetRearranges(longRange.Length, rearrangeLength, ProcessRearrange);
+
         if (oldTextLinesCount < newTextLinesCount)
         {
             var addedPositions = new HashSet<int>(longRange.Select(x => x.Position));
