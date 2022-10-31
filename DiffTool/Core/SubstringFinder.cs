@@ -41,39 +41,39 @@ internal class SubstringFinder
 
     private IReadOnlyCollection<SubstringResult> FindResult(string oldText, string newText)
     {
-        var result = new LinkedList<SubstringResult>();
+        var result = new List<SubstringResult>();
         int count = 0;
-        int i = oldText.Length;
-        int j = newText.Length;
-        while (i > 0 && j > 0)
+        int i = 0;
+        int j = 0;
+        while (i < oldText.Length && j < newText.Length)
         {
-            if (oldText[i - 1] == newText[j - 1])
+            if (oldText[i] == newText[j])
             {
                 count++;
-                i--;
-                j--;
+                i++;
+                j++;
             }
             else
             {
                 if (count > 0)
                 {
-                    result.AddFirst(new SubstringResult(i, j, count));
+                    result.Add(new(i - count, j - count, count));
                     count = 0;
                 }
-                if (_searchMatrix[i, j] == _searchMatrix[i - 1, j])
+                if (_searchMatrix[i, j] == _searchMatrix[i + 1, j])
                 {
-                    i--;
+                    i++;
                 }
                 else
                 {
-                    j--;
+                    j++;
                 }
             }
         }
 
         if (count > 0)
         {
-            result.AddFirst(new SubstringResult(i, j, count));
+            result.Add(new(i - count, j - count, count));
         }
 
         return result;
@@ -81,17 +81,17 @@ internal class SubstringFinder
 
     private void FillSearchMatrix(string oldText, string newText)
     {
-        for (int i = 1; i <= oldText.Length; i++)
+        for (int i = oldText.Length - 1; i >= 0; i--)
         {
-            for (int j = 1; j <= newText.Length; j++)
+            for (int j = newText.Length - 1; j >= 0; j--)
             {
-                if (oldText[i - 1] == newText[j - 1])
+                if (oldText[i] == newText[j])
                 {
-                    _searchMatrix[i, j] = _searchMatrix[i - 1, j - 1] + 1;
+                    _searchMatrix[i, j] = _searchMatrix[i + 1, j + 1] + 1;
                 }
                 else
                 {
-                    _searchMatrix[i, j] = Math.Max(_searchMatrix[i - 1, j], _searchMatrix[i, j - 1]);
+                    _searchMatrix[i, j] = Math.Max(_searchMatrix[i + 1, j], _searchMatrix[i, j + 1]);
                 }
             }
         }

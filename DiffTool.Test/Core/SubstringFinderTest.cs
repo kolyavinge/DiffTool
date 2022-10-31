@@ -63,8 +63,8 @@ internal class SubstringFinderTest
 
         Assert.That(_result, Has.Count.EqualTo(2));
 
-        Assert.That(_result[0], Is.EqualTo(new SubstringResult(0, 0, 4)));
-        Assert.That(_result[1], Is.EqualTo(new SubstringResult(8, 4, 4)));
+        Assert.That(_result[0], Is.EqualTo(new SubstringResult(0, 0, 5)));
+        Assert.That(_result[1], Is.EqualTo(new SubstringResult(9, 5, 3)));
     }
 
     [Test]
@@ -75,9 +75,11 @@ internal class SubstringFinderTest
 
         GetResult();
 
-        Assert.That(_result, Has.Count.EqualTo(1));
+        Assert.That(_result, Has.Count.EqualTo(3));
 
-        Assert.That(_result[0], Is.EqualTo(new SubstringResult(3, 0, 3)));
+        Assert.That(_result[0], Is.EqualTo(new SubstringResult(0, 0, 1)));
+        Assert.That(_result[1], Is.EqualTo(new SubstringResult(2, 1, 1)));
+        Assert.That(_result[2], Is.EqualTo(new SubstringResult(5, 2, 1)));
     }
 
     private void GetResult()
