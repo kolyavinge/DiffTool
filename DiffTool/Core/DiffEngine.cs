@@ -5,13 +5,13 @@ namespace DiffTool.Core;
 
 public class DiffEngine
 {
-    private readonly PrefixSuffixFinder _prefixSuffixFinder;
+    private readonly PrefixFinder _prefixFinder;
     private readonly LinesBlockFinder _linesBlockFinder;
     private readonly LinesBlockProcessor _linesBlockProcessor;
 
     public DiffEngine()
     {
-        _prefixSuffixFinder = new PrefixSuffixFinder();
+        _prefixFinder = new PrefixFinder();
         _linesBlockFinder = new LinesBlockFinder();
         _linesBlockProcessor = new LinesBlockProcessor();
     }
@@ -20,7 +20,7 @@ public class DiffEngine
     {
         var lineDiffs = new List<LineDiff>();
 
-        var prefixLinesCount = _prefixSuffixFinder.GetPrefixLinesCount(oldText, newText);
+        var prefixLinesCount = _prefixFinder.GetPrefixLinesCount(oldText, newText);
         for (int i = 0; i < prefixLinesCount; i++)
         {
             lineDiffs.Add(new(DiffKind.Same, i, i));
@@ -30,17 +30,8 @@ public class DiffEngine
             return new(lineDiffs);
         }
 
-        var suffixLinesCount = 0; // _prefixSuffixFinder.GetSuffixLinesCount(oldText, newText, prefixLinesCount);
-        var suffixLineDiffs = new List<LineDiff>();
-        for (int i = oldText.EndPosition + 1 - suffixLinesCount, j = newText.EndPosition + 1 - suffixLinesCount;
-            i <= oldText.EndPosition && j <= newText.EndPosition;
-            i++, j++)
-        {
-            suffixLineDiffs.Add(new(DiffKind.Same, i, j));
-        }
-
-        oldText = oldText.GetRange(prefixLinesCount, oldText.EndPosition - suffixLinesCount);
-        newText = newText.GetRange(prefixLinesCount, newText.EndPosition - suffixLinesCount);
+        oldText = oldText.GetRange(prefixLinesCount, oldText.EndPosition);
+        newText = newText.GetRange(prefixLinesCount, newText.EndPosition);
 
         if (!oldText.Lines.Any() && newText.Lines.Any())
         {
@@ -73,8 +64,6 @@ public class DiffEngine
                 }
             }
         }
-
-        lineDiffs.AddRange(suffixLineDiffs);
 
         return new(lineDiffs);
     }
