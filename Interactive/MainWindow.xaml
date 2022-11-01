@@ -6,7 +6,7 @@
         xmlns:highlighter="clr-namespace:CodeHighlighter;assembly=CodeHighlighter"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
-        Title="MainWindow"
+        Title="Interactive"
         Height="800"
         Width="1200"
         Background="Wheat">

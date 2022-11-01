@@ -13,8 +13,8 @@ namespace StarterApp
 
         static void Main(string[] args)
         {
-            int rearrangesBenchmark = 1;
-            int changedLinesProcessorBenchmark = 0;
+            int rearrangesBenchmark = 0;
+            int changedLinesProcessorBenchmark = 1;
 
             if (rearrangesBenchmark == 1) RearrangesBenchmark();
 

@@ -6,11 +6,11 @@ namespace DiffTool.Test.Core;
 internal class TextTest
 {
     [Test]
-    public void GetRange()
+    public void GetTextRange()
     {
         var text = new Text("line1\nline2\nline3");
 
-        var result = text.GetRange(0, 2);
+        var result = text.GetTextRange(0, 2);
 
         Assert.That(result.Lines, Has.Length.EqualTo(3));
         Assert.That(result.GetLineByPosition(0).Content, Is.EqualTo("line1"));
@@ -19,11 +19,11 @@ internal class TextTest
     }
 
     [Test]
-    public void GetRange_TwoLast()
+    public void GetTextRange_TwoLast()
     {
         var text = new Text("line1\nline2\nline3");
 
-        var result = text.GetRange(1, 2);
+        var result = text.GetTextRange(1, 2);
 
         Assert.That(result.Lines, Has.Length.EqualTo(2));
         Assert.That(result.GetLineByPosition(1).Content, Is.EqualTo("line2"));
@@ -31,33 +31,33 @@ internal class TextTest
     }
 
     [Test]
-    public void GetRange_First()
+    public void GetTextRange_First()
     {
         var text = new Text("line1\nline2\nline3");
 
-        var result = text.GetRange(0, 0);
+        var result = text.GetTextRange(0, 0);
 
         Assert.That(result.Lines, Has.Length.EqualTo(1));
         Assert.That(result.GetLineByPosition(0).Content, Is.EqualTo("line1"));
     }
 
     [Test]
-    public void GetRange_Second()
+    public void GetTextRange_Second()
     {
         var text = new Text("line1\nline2\nline3");
 
-        var result = text.GetRange(1, 1);
+        var result = text.GetTextRange(1, 1);
 
         Assert.That(result.Lines, Has.Length.EqualTo(1));
         Assert.That(result.GetLineByPosition(1).Content, Is.EqualTo("line2"));
     }
 
     [Test]
-    public void GetRange_Last()
+    public void GetTextRange_Last()
     {
         var text = new Text("line1\nline2\nline3");
 
-        var result = text.GetRange(2, 2);
+        var result = text.GetTextRange(2, 2);
 
         Assert.That(result.Lines, Has.Length.EqualTo(1));
         Assert.That(result.GetLineByPosition(2).Content, Is.EqualTo("line3"));

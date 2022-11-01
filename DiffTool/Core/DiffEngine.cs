@@ -18,20 +18,20 @@ public class DiffEngine
 
     public DiffResult GetDiff(Text oldText, Text newText)
     {
-        var lineDiffs = new List<LineDiff>();
+        var lineDiffs = new List<LineDiff>(Math.Max(oldText.Lines.Count, newText.Lines.Count));
 
         var prefixLinesCount = _prefixFinder.GetPrefixLinesCount(oldText, newText);
         for (int i = 0; i < prefixLinesCount; i++)
         {
             lineDiffs.Add(new(DiffKind.Same, i, i));
         }
-        if (prefixLinesCount == oldText.EndPosition + 1 && prefixLinesCount == newText.EndPosition + 1)
+        if (prefixLinesCount == oldText.Lines.Count && prefixLinesCount == newText.Lines.Count)
         {
             return new(lineDiffs);
         }
 
-        oldText = oldText.GetRange(prefixLinesCount, oldText.EndPosition);
-        newText = newText.GetRange(prefixLinesCount, newText.EndPosition);
+        oldText = oldText.GetTextRange(prefixLinesCount, oldText.EndPosition);
+        newText = newText.GetTextRange(prefixLinesCount, newText.EndPosition);
 
         if (!oldText.Lines.Any() && newText.Lines.Any())
         {

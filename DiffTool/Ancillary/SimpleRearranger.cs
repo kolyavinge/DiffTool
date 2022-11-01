@@ -21,7 +21,11 @@ internal class SimpleRearranger
                 if ((currentRearrange[i] + 1) + (rearrangeLength - i - 1) < itemsCount) // can be increased
                 {
                     currentRearrange[i]++;
-                    for (int j = i + 1; j < rearrangeLength; j++) currentRearrange[j] = currentRearrange[j - 1] + 1;
+                    int x = currentRearrange[i];
+                    for (int j = i + 1; j < rearrangeLength; j++)
+                    {
+                        currentRearrange[j] = ++x;
+                    }
                     resultFunc(currentRearrange);
                     break;
                 }

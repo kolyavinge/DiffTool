@@ -10,12 +10,8 @@ internal class ChangedLinesProcessor
     private readonly SimpleRearranger _rearranger = new SimpleRearranger();
 
     public IReadOnlyList<LineDiff> GetResult(
-        int oldTextStartPosition,
-        int oldTextLinesCount,
-        Text oldText,
-        int newTextStartPosition,
-        int newTextLinesCount,
-        Text newText)
+        int oldTextStartPosition, int oldTextLinesCount, Text oldText,
+        int newTextStartPosition, int newTextLinesCount, Text newText)
     {
         Line[] shortRange;
         Line[] longRange;
@@ -32,31 +28,36 @@ internal class ChangedLinesProcessor
             longRange = oldText.GetLinesRange(oldTextStartPosition, oldTextLinesCount);
             rearrangeLength = newTextLinesCount;
         }
-        int maxCount = int.MinValue;
-        var substringCache = new int[shortRange.Length, longRange.Length];
+
+        var lineWeightMatrix = new int[shortRange.Length, longRange.Length];
         for (int i = 0; i < shortRange.Length; i++)
         {
+            var shortRangeContent = shortRange[i].Content;
             for (int j = i; j < longRange.Length; j++)
             {
-                substringCache[i, j] = _substringFinder.GetResult(shortRange[i].Content, longRange[j].Content).Sum(x => x.Count);
+                lineWeightMatrix[i, j] = _substringFinder.GetResult(shortRangeContent, longRange[j].Content).Sum(x => x.EqualSymbolsCount);
             }
         }
-        var longChangedLines = new Line[rearrangeLength];
 
+        int maxWeight = int.MinValue;
+        var bestRearrange = new int[rearrangeLength];
         void ProcessRearrange(int[] rearrange)
         {
-            var currentCount = 0;
+            var currentWeight = 0;
             for (int i = 0; i < rearrangeLength; i++)
             {
-                currentCount += substringCache[i, rearrange[i]];
+                currentWeight += lineWeightMatrix[i, rearrange[i]];
             }
-            if (currentCount > maxCount)
+            if (currentWeight > maxWeight)
             {
-                maxCount = currentCount;
-                for (int i = 0; i < rearrangeLength; i++) longChangedLines[i] = longRange[rearrange[i]];
+                maxWeight = currentWeight;
+                Array.Copy(rearrange, bestRearrange, rearrangeLength);
             }
         };
         _rearranger.GetRearranges(longRange.Length, rearrangeLength, ProcessRearrange);
+
+        var longChangedLines = new Line[rearrangeLength];
+        for (int i = 0; i < rearrangeLength; i++) longChangedLines[i] = longRange[bestRearrange[i]];
 
         if (oldTextLinesCount < newTextLinesCount)
         {

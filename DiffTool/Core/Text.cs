@@ -11,7 +11,7 @@ public class Text
 
     public readonly int EndPosition;
 
-    public IEnumerable<Line> Lines => _lines;
+    public IReadOnlyCollection<Line> Lines => _lines;
 
     public Text(string text)
     {
@@ -40,7 +40,7 @@ public class Text
         return _lines.Skip(startPosition - StartPosition).Take(count).ToArray();
     }
 
-    internal Text GetRange(int fromIndex, int toIndex)
+    internal Text GetTextRange(int fromIndex, int toIndex)
     {
         var range = new List<Line>();
         for (int i = fromIndex; i <= toIndex; i++)

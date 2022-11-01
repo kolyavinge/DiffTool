@@ -6,18 +6,18 @@ internal readonly struct SubstringResult
 {
     public readonly int OldPosition;
     public readonly int NewPosition;
-    public readonly int Count;
+    public readonly int EqualSymbolsCount;
 
-    public SubstringResult(int oldPosition, int newPosition, int count)
+    public SubstringResult(int oldPosition, int newPosition, int equalSymbolsCount)
     {
         OldPosition = oldPosition;
         NewPosition = newPosition;
-        Count = count;
+        EqualSymbolsCount = equalSymbolsCount;
     }
 
     public override string ToString()
     {
-        return $"{OldPosition}:{NewPosition} {Count}";
+        return $"{OldPosition}:{NewPosition} {EqualSymbolsCount}";
     }
 }
 
