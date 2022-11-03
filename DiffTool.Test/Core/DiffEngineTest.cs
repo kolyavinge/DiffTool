@@ -22,8 +22,7 @@ public class DiffEngineTest
     {
         MakeDiff("", "");
 
-        Assert.That(_linesDiff, Has.Count.EqualTo(1));
-        Assert.That(_linesDiff[0], Is.EqualTo(new LineDiff(DiffKind.Same, 0, 0)));
+        Assert.That(_linesDiff, Has.Count.EqualTo(0));
     }
 
     [Test]
@@ -59,7 +58,16 @@ public class DiffEngineTest
     [Test]
     public void OneEmptyLineChange()
     {
-        MakeDiff("", "change");
+        MakeDiff("", "add");
+
+        Assert.That(_linesDiff, Has.Count.EqualTo(1));
+        Assert.That(_linesDiff[0], Is.EqualTo(new LineDiff(DiffKind.Add, -1, 0)));
+    }
+
+    [Test]
+    public void OneLineWithSpacesChange()
+    {
+        MakeDiff("  ", "new");
 
         Assert.That(_linesDiff, Has.Count.EqualTo(1));
         Assert.That(_linesDiff[0], Is.EqualTo(new LineDiff(DiffKind.Change, 0, 0)));
@@ -68,17 +76,26 @@ public class DiffEngineTest
     [Test]
     public void OneEmptyLineChangeAndOneAdd()
     {
-        MakeDiff("", "change\nadd");
+        MakeDiff("", "add1\nadd2");
 
         Assert.That(_linesDiff, Has.Count.EqualTo(2));
-        Assert.That(_linesDiff[0], Is.EqualTo(new LineDiff(DiffKind.Change, 0, 0)));
+        Assert.That(_linesDiff[0], Is.EqualTo(new LineDiff(DiffKind.Add, -1, 0)));
         Assert.That(_linesDiff[1], Is.EqualTo(new LineDiff(DiffKind.Add, -1, 1)));
     }
 
     [Test]
     public void OneLineChangeToEmpty()
     {
-        MakeDiff("change", "");
+        MakeDiff("remove", "");
+
+        Assert.That(_linesDiff, Has.Count.EqualTo(1));
+        Assert.That(_linesDiff[0], Is.EqualTo(new LineDiff(DiffKind.Remove, 0, -1)));
+    }
+
+    [Test]
+    public void OneLineChangeToSpaces()
+    {
+        MakeDiff("old", "  ");
 
         Assert.That(_linesDiff, Has.Count.EqualTo(1));
         Assert.That(_linesDiff[0], Is.EqualTo(new LineDiff(DiffKind.Change, 0, 0)));
@@ -87,10 +104,10 @@ public class DiffEngineTest
     [Test]
     public void OneLineChangeToEmptyAndOneRemove()
     {
-        MakeDiff("change\nremove", "");
+        MakeDiff("remove1\nremove2", "");
 
         Assert.That(_linesDiff, Has.Count.EqualTo(2));
-        Assert.That(_linesDiff[0], Is.EqualTo(new LineDiff(DiffKind.Change, 0, 0)));
+        Assert.That(_linesDiff[0], Is.EqualTo(new LineDiff(DiffKind.Remove, 0, -1)));
         Assert.That(_linesDiff[1], Is.EqualTo(new LineDiff(DiffKind.Remove, 1, -1)));
     }
 

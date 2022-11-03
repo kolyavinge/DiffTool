@@ -13,6 +13,8 @@ public class Text
 
     public IReadOnlyCollection<Line> Lines => _lines;
 
+    public bool IsEmpty => Lines.Count == 1 && Lines.First().Content == "";
+
     public Text(string text)
     {
         _lines = text

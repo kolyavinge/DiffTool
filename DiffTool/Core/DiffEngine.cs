@@ -20,6 +20,21 @@ public class DiffEngine
     {
         var lineDiffs = new List<LineDiff>(Math.Max(oldText.Lines.Count, newText.Lines.Count));
 
+        if (oldText.IsEmpty && newText.IsEmpty)
+        {
+            return new(lineDiffs);
+        }
+        else if (oldText.IsEmpty && !newText.IsEmpty)
+        {
+            lineDiffs.AddRange(newText.Lines.Select(x => new LineDiff(DiffKind.Add, -1, x.Position)));
+            return new(lineDiffs);
+        }
+        else if (!oldText.IsEmpty && newText.IsEmpty)
+        {
+            lineDiffs.AddRange(oldText.Lines.Select(x => new LineDiff(DiffKind.Remove, x.Position, -1)));
+            return new(lineDiffs);
+        }
+
         var prefixLinesCount = _prefixFinder.GetPrefixLinesCount(oldText, newText);
         for (int i = 0; i < prefixLinesCount; i++)
         {

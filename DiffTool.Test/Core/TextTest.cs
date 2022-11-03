@@ -75,4 +75,23 @@ internal class TextTest
         Assert.That(result[1].Content, Is.EqualTo("3"));
         Assert.That(result[2].Content, Is.EqualTo("4"));
     }
+
+    [Test]
+    public void IsEmpty()
+    {
+        var text = new Text("");
+        Assert.True(text.IsEmpty);
+
+        text = new Text("   ");
+        Assert.False(text.IsEmpty);
+
+        text = new Text("\n");
+        Assert.False(text.IsEmpty);
+
+        text = new Text("\r");
+        Assert.False(text.IsEmpty);
+
+        text = new Text("abc");
+        Assert.False(text.IsEmpty);
+    }
 }
