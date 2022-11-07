@@ -8,7 +8,7 @@ public readonly struct SingleTextVisualizerLineDiff
     public readonly DiffKind DiffKind;
     public readonly TextKind TextKind;
 
-    internal SingleTextVisualizerLineDiff(DiffKind diffKind, TextKind textKind = TextKind.Unspecified)
+    public SingleTextVisualizerLineDiff(DiffKind diffKind, TextKind textKind = TextKind.Unspecified)
     {
         TextKind = textKind;
         DiffKind = diffKind;
@@ -21,7 +21,7 @@ public class SingleTextVisualizerResult
 
     public IReadOnlyList<SingleTextVisualizerLineDiff> LinesDiff { get; }
 
-    internal SingleTextVisualizerResult(string text, IReadOnlyList<SingleTextVisualizerLineDiff> linesDiff)
+    public SingleTextVisualizerResult(string text, IReadOnlyList<SingleTextVisualizerLineDiff> linesDiff)
     {
         Text = text;
         LinesDiff = linesDiff;
