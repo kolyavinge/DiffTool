@@ -170,15 +170,25 @@ internal class LinesBlockFinderTest
     }
 
     [Test]
-    public void FirstOneLineBlockMustBeInResult()
+    public void CrossBlocks()
+    {
+        FindLongestBlocks("1\n\n1\n\n1\n1\n1", "1\n\n1\n\n\n1\n1\n1");
+
+        Assert.That(_result, Has.Count.EqualTo(2));
+
+        Assert.That(_result[0], Is.EqualTo(new LinesBlock(0, 0, 4)));
+        Assert.That(_result[1], Is.EqualTo(new LinesBlock(4, 5, 3)));
+    }
+
+    [Test]
+    public void CrossBlocks2()
     {
         FindLongestBlocks("0\n\n1\n\n1\n1\n1", "1\n\n1\n\n\n1\n1\n1");
 
-        Assert.That(_result, Has.Count.EqualTo(3));
+        Assert.That(_result, Has.Count.EqualTo(2));
 
-        Assert.That(_result[0], Is.EqualTo(new LinesBlock(1, 1, 1)));
-        Assert.That(_result[1], Is.EqualTo(new LinesBlock(2, 2, 1)));
-        Assert.That(_result[2], Is.EqualTo(new LinesBlock(3, 4, 4)));
+        Assert.That(_result[0], Is.EqualTo(new LinesBlock(1, 1, 2)));
+        Assert.That(_result[1], Is.EqualTo(new LinesBlock(3, 4, 4)));
     }
 
     [Test]

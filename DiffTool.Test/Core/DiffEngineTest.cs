@@ -247,7 +247,7 @@ public class DiffEngineTest
     }
 
     [Test]
-    public void DifficultSituation()
+    public void CrossBlocks()
     {
         MakeDiff("0\n\n1\n\n1\n1\n1", "1\n\n1\n\n\n1\n1\n1");
 
