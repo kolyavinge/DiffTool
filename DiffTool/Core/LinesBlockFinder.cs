@@ -68,6 +68,7 @@ internal class LinesBlockFinder
             foreach (var newLinePosition in newLinePositions)
             {
                 int equalLinesCount = 1;
+                yield return new(oldLine.Position, newLinePosition, equalLinesCount);
                 var nextOldPosition = oldLine.Position + 1;
                 var nextNewPosition = newLinePosition + 1;
                 while (nextOldPosition <= oldText.EndPosition && nextNewPosition <= newText.EndPosition)

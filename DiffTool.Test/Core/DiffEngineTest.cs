@@ -246,6 +246,23 @@ public class DiffEngineTest
         Assert.That(_linesDiff[3], Is.EqualTo(new LineDiff(DiffKind.Change, 3, 3)));
     }
 
+    [Test]
+    public void DifficultSituation()
+    {
+        MakeDiff("0\n\n1\n\n1\n1\n1", "1\n\n1\n\n\n1\n1\n1");
+
+        Assert.That(_linesDiff, Has.Count.EqualTo(8));
+
+        Assert.That(_linesDiff[0], Is.EqualTo(new LineDiff(DiffKind.Change, 0, 0)));
+        Assert.That(_linesDiff[1], Is.EqualTo(new LineDiff(DiffKind.Same, 1, 1)));
+        Assert.That(_linesDiff[2], Is.EqualTo(new LineDiff(DiffKind.Same, 2, 2)));
+        Assert.That(_linesDiff[3], Is.EqualTo(new LineDiff(DiffKind.Add, -1, 3)));
+        Assert.That(_linesDiff[4], Is.EqualTo(new LineDiff(DiffKind.Same, 3, 4)));
+        Assert.That(_linesDiff[5], Is.EqualTo(new LineDiff(DiffKind.Same, 4, 5)));
+        Assert.That(_linesDiff[6], Is.EqualTo(new LineDiff(DiffKind.Same, 5, 6)));
+        Assert.That(_linesDiff[7], Is.EqualTo(new LineDiff(DiffKind.Same, 6, 7)));
+    }
+
     private void MakeDiff(string oldText, string newText)
     {
         _diffResult = _engine.GetDiff(new(oldText), new(newText));
