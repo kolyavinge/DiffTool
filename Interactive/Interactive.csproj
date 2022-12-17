@@ -9,6 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\CodeHighlighter\CodeHighlighter.Model\CodeHighlighter.Model.csproj" />
 		<ProjectReference Include="..\..\CodeHighlighter\CodeHighlighter\CodeHighlighter.csproj" />
 		<ProjectReference Include="..\DiffTool\DiffTool.csproj" />
 	</ItemGroup>

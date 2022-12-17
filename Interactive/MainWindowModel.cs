@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Media;
+using CodeHighlighter;
 using CodeHighlighter.CodeProvidering;
 using CodeHighlighter.Model;
 using DiffTool.Core;
@@ -11,20 +11,20 @@ namespace Interactive;
 
 internal class MainWindowModel
 {
-    public CodeTextBoxModel LeftCodeTextBoxModel { get; set; }
-    public CodeTextBoxModel RightCodeTextBoxModel { get; set; }
-    public CodeTextBoxModel DiffCodeTextBoxModel { get; set; }
+    public ICodeTextBoxModel LeftCodeTextBoxModel { get; set; }
+    public ICodeTextBoxModel RightCodeTextBoxModel { get; set; }
+    public ICodeTextBoxModel DiffCodeTextBoxModel { get; set; }
 
     public MainWindowModel()
     {
-        LeftCodeTextBoxModel = new(new SqlCodeProvider());
-        RightCodeTextBoxModel = new(new SqlCodeProvider());
-        DiffCodeTextBoxModel = new(new SqlCodeProvider());
+        LeftCodeTextBoxModel = CodeTextBoxModelFactory.MakeModel(new SqlCodeProvider());
+        RightCodeTextBoxModel = CodeTextBoxModelFactory.MakeModel(new SqlCodeProvider());
+        DiffCodeTextBoxModel = CodeTextBoxModelFactory.MakeModel(new SqlCodeProvider());
         var sqlText = File.ReadAllText(@"D:\Projects\DiffTool\Interactive\Examples\sql.txt");
-        LeftCodeTextBoxModel.SetText(sqlText);
-        RightCodeTextBoxModel.SetText(sqlText);
-        LeftCodeTextBoxModel.TextChanged += OnTextChanged;
-        RightCodeTextBoxModel.TextChanged += OnTextChanged;
+        LeftCodeTextBoxModel.Text = sqlText;
+        RightCodeTextBoxModel.Text = sqlText;
+        LeftCodeTextBoxModel.TextEvents.TextChanged += OnTextChanged;
+        RightCodeTextBoxModel.TextEvents.TextChanged += OnTextChanged;
         ProcessText();
     }
 
@@ -36,21 +36,21 @@ internal class MainWindowModel
     private void ProcessText()
     {
         DiffCodeTextBoxModel.IsReadOnly = false;
-        var oldText = new DiffTool.Core.Text(LeftCodeTextBoxModel.Text.ToString());
-        var newText = new DiffTool.Core.Text(RightCodeTextBoxModel.Text.ToString());
+        var oldText = new Text(LeftCodeTextBoxModel.Text.ToString());
+        var newText = new Text(RightCodeTextBoxModel.Text.ToString());
         var diffEngine = new DiffEngine();
         var diffResult = diffEngine.GetDiff(oldText, newText);
         var visualizator = new SingleTextVisualizer();
         var visualizationResult = visualizator.GetResult(oldText, newText, diffResult.LinesDiff);
-        DiffCodeTextBoxModel.SetText(visualizationResult.Text);
+        DiffCodeTextBoxModel.Text = visualizationResult.Text;
         SetLineColors(visualizationResult.LinesDiff);
         DiffCodeTextBoxModel.IsReadOnly = true;
     }
 
-    private readonly SolidColorBrush _brushAdd = new SolidColorBrush(new() { R = 85, G = 222, B = 78, A = 255 });
-    private readonly SolidColorBrush _brushRemove = new SolidColorBrush(new() { R = 219, G = 94, B = 94, A = 255 });
-    private readonly SolidColorBrush _brushChangeOld = new SolidColorBrush(new() { R = 224, G = 155, B = 150, A = 255 });
-    private readonly SolidColorBrush _brushChangeNew = new SolidColorBrush(new() { R = 128, G = 227, B = 123, A = 255 });
+    private readonly CodeHighlighter.Common.Color _brushAdd = new(85, 222, 78);
+    private readonly CodeHighlighter.Common.Color _brushRemove = new(219, 94, 94);
+    private readonly CodeHighlighter.Common.Color _brushChangeOld = new(224, 155, 150);
+    private readonly CodeHighlighter.Common.Color _brushChangeNew = new(128, 227, 123);
 
     private void SetLineColors(IReadOnlyList<SingleTextVisualizerLineDiff> linesDiff)
     {
